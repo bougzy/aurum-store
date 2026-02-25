@@ -10,10 +10,7 @@ const nextConfig: NextConfig = {
     ],
     unoptimized: false,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
+typescript: {
     ignoreBuildErrors: true,
   },
 };

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { UserRole } from '@/types';
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'fallback-secret'
+  process.env.JWT_SECRET || 'aurum-store-jwt-secret-key-2024'
 );
 
 export interface JWTPayload {
