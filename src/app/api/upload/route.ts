@@ -1,13 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { v2 as cloudinary } from 'cloudinary';
+import connectDB from '@/lib/db';
+import Image from '@/models/Image';
 
 export const dynamic = 'force-dynamic';
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dbje1h0uo',
-  api_key: process.env.CLOUDINARY_API_KEY || '147388986454116',
-  api_secret: process.env.CLOUDINARY_API_SECRET || 'wAm8TKCuwp23O5tkCFBM2zbZGzU',
-});
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,21 +28,16 @@ export async function POST(req: NextRequest) {
     }
 
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const base64 = Buffer.from(bytes).toString('base64');
 
-    // Upload to Cloudinary
-    const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: 'aurum-store', resource_type: 'image' },
-        (error, result) => {
-          if (error || !result) return reject(error || new Error('Upload failed'));
-          resolve(result);
-        }
-      );
-      stream.end(buffer);
+    await connectDB();
+
+    const image = await Image.create({
+      data: base64,
+      contentType: file.type,
     });
 
-    return NextResponse.json({ url: result.secure_url });
+    return NextResponse.json({ url: `/api/images/${image._id}` });
   } catch (error: unknown) {
     console.error('Upload error:', error);
     return NextResponse.json(
