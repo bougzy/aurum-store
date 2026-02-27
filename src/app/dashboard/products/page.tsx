@@ -213,13 +213,13 @@ export default function ProductsPage() {
     }
   };
 
-  const ProductFormFields = () => (
+  const productFormFields = (
     <div className="space-y-4">
       <Input
         label="Product Name"
         placeholder="e.g., 24K Gold Ring"
         value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
+        onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
       />
       <div className="w-full">
         <label className="block text-sm font-medium text-gold-300 mb-1.5">Description</label>
@@ -227,7 +227,7 @@ export default function ProductsPage() {
           className="w-full px-4 py-2.5 bg-dark-800 border border-dark-500 rounded-lg text-[#f5f0e1] placeholder-dark-500/70 focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500/50 transition-all duration-200 min-h-[80px] resize-y"
           placeholder="Describe your product..."
           value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
         />
       </div>
       <div className="w-full">
@@ -235,7 +235,7 @@ export default function ProductsPage() {
         <select
           className="w-full px-4 py-2.5 bg-dark-800 border border-dark-500 rounded-lg text-[#f5f0e1] focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500/50 transition-all duration-200"
           value={form.goldPurity}
-          onChange={(e) => setForm({ ...form, goldPurity: e.target.value })}
+          onChange={(e) => setForm((prev) => ({ ...prev, goldPurity: e.target.value }))}
         >
           {purityOptions.map((p) => (
             <option key={p} value={p}>{p}</option>
@@ -249,7 +249,7 @@ export default function ProductsPage() {
           step="0.01"
           placeholder="0.00"
           value={form.weight}
-          onChange={(e) => setForm({ ...form, weight: e.target.value })}
+          onChange={(e) => setForm((prev) => ({ ...prev, weight: e.target.value }))}
         />
         <Input
           label="Price ($)"
@@ -257,14 +257,14 @@ export default function ProductsPage() {
           step="0.01"
           placeholder="0.00"
           value={form.price}
-          onChange={(e) => setForm({ ...form, price: e.target.value })}
+          onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))}
         />
         <Input
           label="Stock"
           type="number"
           placeholder="0"
           value={form.stock}
-          onChange={(e) => setForm({ ...form, stock: e.target.value })}
+          onChange={(e) => setForm((prev) => ({ ...prev, stock: e.target.value }))}
         />
       </div>
 
@@ -273,7 +273,7 @@ export default function ProductsPage() {
         <label className="block text-sm font-medium text-gold-300 mb-1.5">Product Images</label>
         <div className="flex flex-wrap gap-3 mb-3">
           {form.images.map((url, i) => (
-            <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-dark-600 group">
+            <div key={url} className="relative w-20 h-20 rounded-lg overflow-hidden border border-dark-600 group">
               <img src={url} alt="" className="w-full h-full object-cover" />
               <button
                 type="button"
@@ -414,7 +414,7 @@ export default function ProductsPage() {
 
       {/* Add Product Modal */}
       <Modal isOpen={showAddModal} onClose={() => setShowAddModal(false)} title="Add New Product">
-        <ProductFormFields />
+        {productFormFields}
         <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-dark-600">
           <Button variant="ghost" onClick={() => setShowAddModal(false)}>Cancel</Button>
           <Button onClick={handleAdd} loading={saving}>Create Product</Button>
@@ -423,7 +423,7 @@ export default function ProductsPage() {
 
       {/* Edit Product Modal */}
       <Modal isOpen={showEditModal} onClose={() => setShowEditModal(false)} title="Edit Product">
-        <ProductFormFields />
+        {productFormFields}
         <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-dark-600">
           <Button variant="ghost" onClick={() => setShowEditModal(false)}>Cancel</Button>
           <Button onClick={handleEdit} loading={saving}>Save Changes</Button>
